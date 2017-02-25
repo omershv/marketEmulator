@@ -10,3 +10,4 @@ keys_private.txt - Contains private keys, each group will receive one of these (
 keys_public.pkl - Pickle file containing the public keys, this is available for everyone
 user_holdings.pkl - Contains the current market state and user inventory
 request_ids.pkl - Contains the most recent request id created, used for generating unique request IDs
+active_queries.pkl - Contains the active queries in the system

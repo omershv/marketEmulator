@@ -3,30 +3,86 @@ import urllib2
 from Crypto.PublicKey import RSA
 import pickle
 
+def makeReq(data):
+	req = urllib2.Request("http://127.0.0.1")
+	req.add_header("Content-Type", "application/json")
+	response = urllib2.urlopen(req, json.dumps(data))
+	return response.read()
+
 user = "user99"
 
-keys = private_key = open("keys_private.txt",'rb').read()
+keys = private_key = open("keys_private.txt","rb").read()
 key = keys[keys.index(user):]
 key = key[key.index("-----BEGIN RSA PRIVATE KEY-----"):]
 key = key[:key.index("-----END RSA PRIVATE KEY-----") + len("-----END RSA PRIVATE KEY-----")]
 
 privateKey = RSA.importKey(key)
 
-
-
-users = pickle.load(open("keys_public.pkl",'rb'))
+users = pickle.load(open("keys_public.pkl","rb"))
 public_key_object = RSA.importKey(users[user])
 token = privateKey.sign(user,"")[0]
 
-data = {
-        'auth': {"user": user, "token": token},
-		'type': "buy",
+buyRequest1 = {
+        "auth": {"user": user, "token": token},
+		"type": "buy",
 		"commodity": 1,
-		'price': 500
+		"amount":10,
+		"price": 5
 }
 
-req = urllib2.Request('http://127.0.0.1')
-req.add_header('Content-Type', 'application/json')
+buyRequest2 = {
+        "auth": {"user": user, "token": token},
+		"type": "buy",
+		"commodity": 1,
+		"amount":10,
+		"price": 1
+}
 
-response = urllib2.urlopen(req, json.dumps(data))
-print response.read()
+sellRequest1 = {
+        "auth": {"user": user, "token": token},
+		"type": "sell",
+		"commodity": 2,
+		"amount":10,
+		"price": 5
+}
+
+queryUserRequest = {
+        "auth": {"user": user, "token": token},
+		"type": "queryUser",
+}
+
+queryBuySellRequest = {
+        "auth": {"user": user, "token": token},
+		"type": "queryBuySell",
+		"id":1,
+}
+
+queryMarketRequest = {
+        "auth": {"user": user, "token": token},
+		"type": "queryMarket",
+		"commodity":1,
+}
+
+cancelBuySell1 = {
+        "auth": {"user": user, "token": token},
+		"type": "cancelBuySell",
+		"id":1,
+}
+
+cancelBuySell2 = {
+        "auth": {"user": user, "token": token},
+		"type": "cancelBuySell",
+		"id":2,
+}
+
+
+print makeReq(buyRequest1)
+print makeReq(buyRequest2)
+print makeReq(sellRequest1)
+print makeReq(queryUserRequest)
+print makeReq(queryBuySellRequest)
+print makeReq(queryMarketRequest)
+print makeReq(cancelBuySell1)
+print makeReq(queryMarketRequest)
+print makeReq(cancelBuySell2)
+print makeReq(queryUserRequest)
