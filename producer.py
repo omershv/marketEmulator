@@ -4,6 +4,9 @@ from Crypto.PublicKey import RSA
 import pickle
 
 def makeReq(data):
+	print
+	print json.dumps(data)
+	print
 	req = urllib2.Request("http://127.0.0.1")
 	req.add_header("Content-Type", "application/json")
 	response = urllib2.urlopen(req, json.dumps(data))

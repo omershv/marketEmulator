@@ -1,8 +1,8 @@
-import pickle
 import MarketState
 from Crypto.PublicKey import RSA
 import traceback
 import json
+import RequestOperations
 
 class MarketRequest:
 	def toDict(self):
@@ -14,63 +14,6 @@ class MarketRequest:
 		"price": self.price,
 		}
 		return d
-		
-	def processBuySell(self):
-		if self.type=="buy":
-			if MarketState.userHoldings[self.user]["funds"] < self.price * self.amount:
-				return "Insufficient funds"
-			MarketState.userHoldings[self.user]["funds"] -= self.price * self.amount
-		else:
-			if MarketState.userHoldings[self.user]["commodities"][self.commodity] < self.amount:
-				return "Insufficient commodity"
-			MarketState.userHoldings[self.user]["commodities"][self.commodity] -= self.amount
-		MarketState.activeQueries.append(self)
-		return str(self.id)
-	
-	def processQueryBuySell(self):
-		matches = [x for x in MarketState.activeQueries if x.id == self.id]
-		if len(matches) == 0:
-			return "Id not found"
-		if matches[0].user != self.user:
-			return "User does not match"
-		
-		return json.dumps(matches[0].toDict())
-	
-	def processQueryUser(self):
-		MarketState.userHoldings[self.user]["requests"] = [x.id for x in MarketState.activeQueries if x.user == self.user]
-		return json.dumps(MarketState.userHoldings[self.user])
-	
-	def processQueryMarket(self):
-		requests = [x for x in MarketState.activeQueries if x.commodity == self.commodity]
-		buyRequests = [x for x in requests if x.type == "buy"]
-		sellRequests = [x for x in requests if x.type == "sell"]
-		
-		buyRequests = list(reversed(sorted(buyRequests, key = lambda r:r.price)))
-		sellRequests = sorted(sellRequests, key = lambda r:r.price)
-		
-		bid = 0
-		ask = 9999999
-		if len(buyRequests) > 0:
-			bid = buyRequests[0].price
-		if len(sellRequests) > 0:
-			ask = sellRequests[0].price
-		return json.dumps({"bid":bid, "ask":ask})
-	
-	def processCancelBuySell(self):
-		matches = [x for x in MarketState.activeQueries if x.id == self.id]
-		if len(matches) == 0:
-			return "Id not found"
-		if matches[0].user != self.user:
-			return "User does not match"
-		
-		req = matches[0]
-		if req.type=="buy":
-			MarketState.userHoldings[self.user]["funds"] += req.price * req.amount
-		else:
-			MarketState.userHoldings[self.user]["commodities"][req.commodity] += req.amount
-		
-		del MarketState.activeQueries[MarketState.activeQueries.index(req)]
-		return str("Ok")
 	
 	def loadBuySell(self, json):
 		try:
@@ -85,7 +28,7 @@ class MarketRequest:
 				return "Bad commodity"
 			
 			self.id = MarketState.generateRequestId()
-			return self.processBuySell()
+			return RequestOperations.processReq(self)
 		except Exception as e: 
 			print traceback.print_exc()
 			return str(e)
@@ -96,14 +39,14 @@ class MarketRequest:
 				return "No query id"
 			self.id = int(json["id"])
 			
-			return self.processQueryBuySell()
+			return RequestOperations.processReq(self)
 		except Exception as e: 
 			print traceback.print_exc()
 			return str(e)
 	
 	def loadQueryUser(self, json):
 		try:
-			return self.processQueryUser()
+			return RequestOperations.processReq(self)
 		except Exception as e: 
 			print traceback.print_exc()
 			return str(e)
@@ -114,7 +57,7 @@ class MarketRequest:
 				return "No commodity"
 			
 			self.commodity = int(json["commodity"])
-			return self.processQueryMarket()
+			return RequestOperations.processReq(self)
 		except Exception as e: 
 			print traceback.print_exc()
 			return str(e)
@@ -125,7 +68,7 @@ class MarketRequest:
 				return "No query id"
 			self.id = int(json["id"])
 			
-			return self.processCancelBuySell()
+			return RequestOperations.processReq(self)
 		except Exception as e: 
 			print traceback.print_exc()
 			return str(e)
