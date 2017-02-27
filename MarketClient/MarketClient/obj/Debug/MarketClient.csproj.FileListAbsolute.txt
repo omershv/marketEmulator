@@ -1,0 +1,6 @@
+C:\Users\tomer\documents\visual studio 2015\Projects\MarketClient\MarketClient\bin\Debug\MarketClient.dll
+C:\Users\tomer\documents\visual studio 2015\Projects\MarketClient\MarketClient\bin\Debug\MarketClient.pdb
+C:\Users\tomer\documents\visual studio 2015\Projects\MarketClient\MarketClient\bin\Debug\BouncyCastle.Crypto.dll
+C:\Users\tomer\documents\visual studio 2015\Projects\MarketClient\MarketClient\bin\Debug\Newtonsoft.Json.dll
+C:\Users\tomer\documents\visual studio 2015\Projects\MarketClient\MarketClient\obj\Debug\MarketClient.dll
+C:\Users\tomer\documents\visual studio 2015\Projects\MarketClient\MarketClient\obj\Debug\MarketClient.pdb

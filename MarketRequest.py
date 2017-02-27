@@ -1,5 +1,7 @@
 import MarketState
 from Crypto.PublicKey import RSA
+from Crypto.Signature import PKCS1_v1_5
+from Crypto.Hash import SHA256
 import traceback
 import json
 import RequestOperations
@@ -94,8 +96,10 @@ class MarketRequest:
 				return "Bad user"
 			
 			public_key_object = RSA.importKey(keys[user])
-			
-			verified = public_key_object.verify(user, (token,))
+			cipher = PKCS1_v1_5.new(public_key_object)
+			digest = SHA256.new()
+			digest.update(user)
+			verified = cipher.verify(digest, token.decode('base64'))
 			
 			if not verified:
 				return "Verification failure"

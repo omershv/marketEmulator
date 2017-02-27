@@ -1,0 +1,9 @@
+C:\Users\tomer\Documents\Visual Studio 2015\Projects\MarketClient\MarketClientTest\bin\Debug\MarketClientTest.dll
+C:\Users\tomer\Documents\Visual Studio 2015\Projects\MarketClient\MarketClientTest\bin\Debug\MarketClientTest.pdb
+C:\Users\tomer\Documents\Visual Studio 2015\Projects\MarketClient\MarketClientTest\bin\Debug\MarketClient.dll
+C:\Users\tomer\Documents\Visual Studio 2015\Projects\MarketClient\MarketClientTest\bin\Debug\Newtonsoft.Json.dll
+C:\Users\tomer\Documents\Visual Studio 2015\Projects\MarketClient\MarketClientTest\bin\Debug\BouncyCastle.Crypto.dll
+C:\Users\tomer\Documents\Visual Studio 2015\Projects\MarketClient\MarketClientTest\bin\Debug\MarketClient.pdb
+C:\Users\tomer\Documents\Visual Studio 2015\Projects\MarketClient\MarketClientTest\obj\Debug\MarketClientTest.csprojResolveAssemblyReference.cache
+C:\Users\tomer\Documents\Visual Studio 2015\Projects\MarketClient\MarketClientTest\obj\Debug\MarketClientTest.dll
+C:\Users\tomer\Documents\Visual Studio 2015\Projects\MarketClient\MarketClientTest\obj\Debug\MarketClientTest.pdb
