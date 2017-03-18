@@ -3,6 +3,7 @@ import SocketServer
 import json
 import MarketRequest
 import MarketState
+import MarketTrader
 import threading
 import time
 import os
@@ -43,6 +44,7 @@ def run(server_class=HTTPServer, handler_class=S, port=80):
 		time.sleep(10)
 		semaphore.acquire()
 		
+		MarketTrader.performTrades()
 		MarketState.saveData()
 		
 		if os.path.exists("shutdown"):

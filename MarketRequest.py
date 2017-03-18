@@ -10,7 +10,7 @@ import pickle
 class MarketRequest:
 	def toDict(self):
 		d = {
-		"user":self.user,
+		"user": self.user,
 		"type": self.type,
 		"commodity": self.commodity,
 		"amount": self.amount,

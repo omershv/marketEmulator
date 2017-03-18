@@ -8,7 +8,7 @@ import argparse
 import sys
 
 def makeBuyRequest(commodity, amount, price):
-	req = buyRequest1 = {
+	req = {
         "auth": {"user": user, "token": token},
 		"type": "buy",
 		"commodity": commodity,
@@ -18,7 +18,7 @@ def makeBuyRequest(commodity, amount, price):
 	return makeReq(req)
 
 def makeSellRequest(commodity, amount, price):
-	req = buyRequest1 = {
+	req = {
         "auth": {"user": user, "token": token},
 		"type": "sell",
 		"commodity": commodity,
@@ -70,7 +70,7 @@ def makeReq(data):
 	print
 	print json.dumps(data)
 	print
-	req = urllib2.Request("http://132.72.65.150")
+	req = urllib2.Request("http://127.0.0.1")
 	req.add_header("Content-Type", "application/json")
 	response = urllib2.urlopen(req, json.dumps(data))
 	return response.read()
@@ -94,6 +94,7 @@ def init():
 
 def parse_args():
 	parser = argparse.ArgumentParser(description='Runs queries on the market server.')
+	
 	subparsers = parser.add_subparsers(help='sub-command help')
 
 	parser_buy = subparsers.add_parser('buy', help='buy request')
