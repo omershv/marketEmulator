@@ -1,3 +1,6 @@
+import os
+os.chdir("C:\marketEmulator")
+
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 import SocketServer
 import json
@@ -6,7 +9,6 @@ import MarketState
 import MarketTrader
 import threading
 import time
-import os
 
 semaphore =  threading.Semaphore()
 
