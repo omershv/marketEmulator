@@ -22,28 +22,28 @@ def parse_args():
 	
 	return args
 
-def produced_something(amount):
-	global producingRate
+def consumed_something(amount):
+	global consumingRate
 	marketPrices = json.loads(clientFramework.makeQueryMarketRequest(commodity))
 	bid = marketPrices["bid"]
 	ask = marketPrices["ask"]
 	print marketPrices
-	print producingRate
+	print consumingRate
 	if bid == 0: # no buyers
 		if ask == 9999999: # no sellers
 			price = 10 # default price
 		else:
-			price = max(2, ask - 1) # sell for cheap
+			price = max(2, ask - 1) # buy for cheap
 	else:
 		if ask == 9999999: # no sellers
-			price = bid + 1 # sell expensive
+			price = bid + 1 # buy expensive
 		else:
-			price = int((ask + bid) / 2) - 1 # compromise
+			price = int((ask + bid) / 2) + 1 # compromise
 	
-	producingRateTarget = 1 + (price - 10) * 0.1
-	producingRate = producingRate * 0.8 + producingRateTarget * 0.2
-	print clientFramework.makeSellRequest(commodity, amount, price)
-
+	consumingRateTarget = 1 + (10 - price) * 0.1
+	consumingRate = consumingRate * 0.8 + consumingRateTarget * 0.2
+	print clientFramework.makeBuyRequest(commodity, amount, price)
+	
 args = parse_args()
 commodity = args.commodity
 
@@ -51,7 +51,7 @@ commodity = args.commodity
 clientFramework.init(args.user, "http://127.0.0.1")
 clientFramework.cancelAllBuySells()
 
-producingRate = 1.0
+consumingRate = 1.0
 while True:
 	time.sleep(random.randrange(1, 10))
-	produced_something(int(random.randrange(10) * producingRate) + 1)
+	consumed_something(int(random.randrange(10) * consumingRate) + 1)

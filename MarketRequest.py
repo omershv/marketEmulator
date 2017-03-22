@@ -30,6 +30,11 @@ class MarketRequest:
 			if not MarketState.commodities.has_key(self.commodity):
 				return "Bad commodity"
 			
+			if self.amount <= 0:
+				return "Bad amount"
+			
+			if self.price <= 0:
+				return "Bad price"
 			self.id = MarketState.generateRequestId()
 			return RequestOperations.processReq(self)
 		except Exception as e: 

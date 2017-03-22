@@ -1,5 +1,8 @@
 import os
-os.chdir("C:\marketEmulator")
+try:
+	os.chdir("C:\marketEmulator")
+except:
+	None
 
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 import SocketServer
@@ -20,7 +23,7 @@ class S(BaseHTTPRequestHandler):
 
 	def do_GET(self):
 		self._set_headers()
-		self.wfile.write("<html><body><h1>get</h1></body></html>")
+		self.wfile.write("<html><body>%s</body></html>"%str("<br>".join(map(lambda (k,v):k + " - " + str(v),MarketState.userHoldings.items()))))
 
 	def do_HEAD(self):
 		self._set_headers()
