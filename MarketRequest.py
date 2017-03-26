@@ -64,6 +64,9 @@ class MarketRequest:
 			if not json.has_key("commodity"):
 				return "No commodity"
 			
+			if not MarketState.commodities.has_key(self.commodity):
+				return "Bad commodity"
+			
 			self.commodity = int(json["commodity"])
 			return RequestOperations.processReq(self)
 		except Exception as e: 
