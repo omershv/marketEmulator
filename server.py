@@ -30,12 +30,21 @@ class S(BaseHTTPRequestHandler):
 		
 	def do_POST(self):
 		semaphore.acquire()
-		self._set_headers()
-		self.data_string = self.rfile.read(int(self.headers['Content-Length']))
-		data = json.loads(self.data_string)
-		req = MarketRequest.MarketRequest()
-		resp = req.loadFromJson(data)
-		self.wfile.write(str(resp))
+		try:
+			self._set_headers()
+			self.data_string = self.rfile.read(int(self.headers['Content-Length']))
+			data = json.loads(self.data_string)
+			req = MarketRequest.MarketRequest()
+			resp = req.loadFromJson(data)
+		except Exception as e: 
+			print traceback.print_exc()
+			resp = str(e)
+		
+		try:
+			self.wfile.write(str(resp))
+		except Exception as e: 
+			print traceback.print_exc()
+			return str(e)
 		semaphore.release()
 		
 def run(server_class=HTTPServer, handler_class=S, port=80):
