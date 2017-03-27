@@ -58,8 +58,11 @@ def run(server_class=HTTPServer, handler_class=S, port=80):
 		time.sleep(10)
 		semaphore.acquire()
 		
-		MarketTrader.performTrades()
-		MarketState.saveData()
+		try:
+			MarketTrader.performTrades()
+			MarketState.saveData()
+		except Exception as e: 
+			print traceback.print_exc()
 		
 		if os.path.exists("shutdown"):
 			os.unlink("shutdown")
