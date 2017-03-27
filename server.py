@@ -40,12 +40,11 @@ class S(BaseHTTPRequestHandler):
 			print traceback.print_exc()
 			resp = str(e)
 		
+		semaphore.release()
 		try:
 			self.wfile.write(str(resp))
 		except Exception as e: 
 			print traceback.print_exc()
-			return str(e)
-		semaphore.release()
 		
 def run(server_class=HTTPServer, handler_class=S, port=80):
 	global httpd
