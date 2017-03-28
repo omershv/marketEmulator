@@ -12,6 +12,7 @@ import MarketState
 import MarketTrader
 import threading
 import time
+import traceback
 
 semaphore =  threading.Semaphore()
 
