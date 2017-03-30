@@ -34,6 +34,14 @@ def makeQueryUserRequest():
 	}
 	return makeReq(req)
 
+def makeExtendedQueryUserRequest():
+	ret = ""
+	resp = json.loads(makeQueryUserRequest())
+	if resp.has_key("requests"):
+		for req in resp["requests"]:
+			ret += "\n" + makeQueryBuySellRequest(req)
+	return ret
+
 def makeQueryMarketRequest(commodity):
 	req = {
         "auth": {"user": user, "token": token},
