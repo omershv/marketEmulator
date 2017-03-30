@@ -120,7 +120,7 @@ class MarketRequest:
 			
 			self.type = json["type"].encode("utf8")
 			
-			print "User %s Request %"%(user, self.type)
+			print "User %s Request %s"%(user, self.type)
 			
 			if not self.requestTypes.has_key(self.type):
 				return "Bad request type"
