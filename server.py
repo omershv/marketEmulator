@@ -31,6 +31,7 @@ class S(BaseHTTPRequestHandler):
 		
 	def do_POST(self):
 		semaphore.acquire()
+		resp = ""
 		try:
 			self._set_headers()
 			self.data_string = self.rfile.read(int(self.headers['Content-Length']))
@@ -42,6 +43,7 @@ class S(BaseHTTPRequestHandler):
 			resp = str(e)
 		
 		semaphore.release()
+		print "response = %s"%(resp)
 		try:
 			self.wfile.write(str(resp))
 		except Exception as e: 
