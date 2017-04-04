@@ -31,7 +31,12 @@ class S(SimpleHTTPRequestHandler):
 
 	def do_GET(self):
 		self._set_headers()
-		self.wfile.write("<html><body>%s</body></html>"%str("<br>".join(map(lambda (k,v):k + " - " + str(v),MarketState.userHoldings.items()))))
+		holdings = sorted(MarketState.userHoldings.items(), key = lambda (k,v):int(k.split("user")[1]))
+		leading = map(lambda (a,b):a + " - " + str(b["funds"]), list(reversed(sorted(holdings[:80], key=lambda (k,v): v["funds"])))[:5])
+		self.wfile.write("<html><body>");
+		self.wfile.write("<h1> Leaders </h1> <h3>%s</h3>"%str("<br>".join(leading)))
+		self.wfile.write("<h1> Holdings </h1> %s"%str("<br>".join(map(lambda (k,v):k + " - " + str(v),holdings))))
+		self.wfile.write("</body></html>");
 
 	def do_HEAD(self):
 		self._set_headers()
