@@ -4,7 +4,10 @@ try:
 except:
 	None
 
-from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
+from SocketServer import ThreadingMixIn
+from SimpleHTTPServer import SimpleHTTPRequestHandler
+from BaseHTTPServer import HTTPServer
+
 import SocketServer
 import json
 import MarketRequest
@@ -13,10 +16,14 @@ import MarketTrader
 import threading
 import time
 import traceback
+import sys
+
+class ThreadingSimpleServer(ThreadingMixIn, HTTPServer):
+	pass
 
 semaphore =  threading.Semaphore()
 
-class S(BaseHTTPRequestHandler):
+class S(SimpleHTTPRequestHandler):
 	def _set_headers(self):
 		self.send_response(200)
 		self.send_header('Content-type', 'text/html')
@@ -90,7 +97,7 @@ if __name__ == "__main__":
 		MarketState.resetStatus()
 		MarketState.saveData()
 	elif len(argv) == 2:
-		run(port=int(argv[1]))
+		run(server_class=ThreadingSimpleServer, port=int(argv[1]))
 	else:
-		run()
+		run(server_class=ThreadingSimpleServer)
 	
