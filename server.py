@@ -30,17 +30,25 @@ class S(BaseHTTPRequestHandler):
 		self._set_headers()
 		
 	def do_POST(self):
-		semaphore.acquire()
+		data = None
 		resp = ""
+		
 		try:
 			self._set_headers()
 			self.data_string = self.rfile.read(int(self.headers['Content-Length']))
 			data = json.loads(self.data_string)
-			req = MarketRequest.MarketRequest()
-			resp = req.loadFromJson(data)
 		except Exception as e: 
 			print traceback.print_exc()
 			resp = str(e)
+		
+		semaphore.acquire()
+		if data is not None:
+			try:			
+				req = MarketRequest.MarketRequest()
+				resp = req.loadFromJson(data)
+			except Exception as e: 
+				print traceback.print_exc()
+				resp = str(e)
 		
 		semaphore.release()
 		#print "response = %s"%(resp)
