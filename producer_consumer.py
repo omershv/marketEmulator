@@ -10,6 +10,7 @@ import clientFramework
 import time
 import random
 import traceback
+import os
 
 def parse_args():
 	parser = argparse.ArgumentParser(description='Producer/Consumer')
@@ -72,6 +73,9 @@ while True:
 rate = 1.0
 while True:
 	time.sleep(random.randrange(1, 10))
+	if os.path.exists("shutdownc"):
+		print 'Shutting down...'
+		break
 	try:
 		tradeSomething(int(random.randrange(10) * rate) + 1)
 	except Exception as e: 

@@ -43,7 +43,7 @@ class S(BaseHTTPRequestHandler):
 			resp = str(e)
 		
 		semaphore.release()
-		print "response = %s"%(resp)
+		#print "response = %s"%(resp)
 		try:
 			self.wfile.write(str(resp))
 		except Exception as e: 
