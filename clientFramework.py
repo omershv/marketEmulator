@@ -34,6 +34,13 @@ def makeQueryUserRequest():
 	}
 	return makeReq(req)
 
+def makeQueryUserRequestsRequest():
+	req = {
+        "auth": {"user": user, "token": token},
+		"type": "queryUserRequests",
+	}
+	return makeReq(req)
+
 def makeExtendedQueryUserRequest():
 	ret = ""
 	resp = json.loads(makeQueryUserRequest())

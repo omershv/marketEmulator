@@ -26,6 +26,10 @@ def __processQueryUser(req):
 	MarketState.userHoldings[req.user]["requests"] = [x.id for x in MarketState.activeQueries if x.user == req.user]
 	return json.dumps(MarketState.userHoldings[req.user])
 
+def __processQueryUserRequests(req):
+	reqs = [{"id":x.id, "request":x.toDict()} for x in MarketState.activeQueries if x.user == req.user]
+	return json.dumps(reqs)
+
 def __processQueryMarket(req):
 	requests = [x for x in MarketState.activeQueries if x.commodity == req.commodity]
 	buyRequests = [x for x in requests if x.type == "buy"]
@@ -61,6 +65,6 @@ def __processCancelBuySell(req):
 def processReq(req):
 	requestTypes = {"buy": __processBuySell, "sell": __processBuySell, "queryBuySell":__processQueryBuySell, 
 	"queryUser":__processQueryUser, "queryMarket":__processQueryMarket,
-	"cancelBuySell":__processCancelBuySell}
+	"cancelBuySell":__processCancelBuySell, "queryUserRequests":__processQueryUserRequests}
 	
 	return requestTypes[req.type](req)

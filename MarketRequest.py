@@ -89,7 +89,7 @@ class MarketRequest:
 	
 	requestTypes = {"buy": loadBuySell, "sell": loadBuySell, "queryBuySell":loadQueryBuySell, 
 	"queryUser":loadQueryUser, "queryMarket":loadQueryMarket,
-	"cancelBuySell":loadCancelBuySell}
+	"cancelBuySell":loadCancelBuySell, "queryUserRequests":loadQueryUser}
 	
 	def loadFromJson(self, json):
 		try:

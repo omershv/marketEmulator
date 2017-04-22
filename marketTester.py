@@ -25,6 +25,9 @@ def parse_args():
 
 	parser_query_user = subparsers.add_parser('query_user', help='query user request')
 	
+	parser_query_user_requests = subparsers.add_parser('query_user_requests', help='query user requests request')
+	parser_query_user_requests.add_argument('user', type=str)
+	
 	parser_query_user_extended = subparsers.add_parser('query_user_extended', help='extended query user request')
 	parser_query_user_extended.add_argument('user', type=str)
 
@@ -48,13 +51,13 @@ def parse_args():
 
 user = "user99"
 args = parse_args()
-if sys.argv[1] == "query_user_extended":
+if sys.argv[1] == "query_user_extended" or sys.argv[1] == "query_user_requests":
 	user = args.user
 	del args.user
 clientFramework.init(user, "http://ise172.ise.bgu.ac.il")
 #clientFramework.init(user, "http://127.0.0.1")
 
 print {'buy': clientFramework.makeBuyRequest, 'sell': clientFramework.makeSellRequest, 'query_user': clientFramework.makeQueryUserRequest, 
-'query_user_extended': clientFramework.makeExtendedQueryUserRequest, 'query_buy_sell': clientFramework.makeQueryBuySellRequest, 
-'query_market': clientFramework.makeQueryMarketRequest, 'cancel_buy_sell': clientFramework.makeCancelBuySellRequest, 
+'query_user_requests': clientFramework.makeQueryUserRequestsRequest, 'query_user_extended': clientFramework.makeExtendedQueryUserRequest, 
+'query_buy_sell': clientFramework.makeQueryBuySellRequest, 'query_market': clientFramework.makeQueryMarketRequest, 'cancel_buy_sell': clientFramework.makeCancelBuySellRequest, 
 'cancel_all_buy_sell': clientFramework.cancelAllBuySells}[sys.argv[1]](**vars(args))
