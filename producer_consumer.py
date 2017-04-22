@@ -78,5 +78,7 @@ while True:
 		break
 	try:
 		tradeSomething(int(random.randrange(10) * rate) + 1)
+		if random.random() > 0.9:
+			clientFramework.cancelOldBuySells()
 	except Exception as e: 
 		print traceback.print_exc()

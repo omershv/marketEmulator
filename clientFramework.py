@@ -74,6 +74,14 @@ def cancelAllBuySells():
 			ret += "\n" + makeCancelBuySellRequest(req)
 	return ret
 
+def cancelOldBuySells():
+	ret = ""
+	resp = json.loads(makeQueryUserRequest())
+	if resp.has_key("requests"):
+		for req in sorted(resp["requests"])[:-10]:
+			ret += "\n" + makeCancelBuySellRequest(req)
+	return ret
+
 def makeReq(data):
 	print
 	print json.dumps(data)
