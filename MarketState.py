@@ -1,4 +1,7 @@
 import pickle
+import threading
+
+semaphore = threading.Semaphore()
 
 userPublicKeys = pickle.load(open("keys_public.pkl",'r'))
 users = userPublicKeys.keys()

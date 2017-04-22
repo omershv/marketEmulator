@@ -6,6 +6,9 @@ import traceback
 import json
 import RequestOperations
 import pickle
+import time
+
+userTimings = dict(map(lambda i:(("user%d"%i), list(range(0,2000,100))),range(100)))
 
 class MarketRequest:
 	def toDict(self):
@@ -114,6 +117,14 @@ class MarketRequest:
 				return "Verification failure"
 			
 			self.user = user
+			
+			userTimings[self.user].append(time.time())
+			userTimings[self.user] = userTimings[self.user][-20:]
+			if userTimings[self.user][-1] - userTimings[self.user][0] < 10:
+				print "Penalty for user %s"%(self.user)
+				MarketState.semaphore.release()
+				time.sleep(120)
+				MarketState.semaphore.acquire()
 			
 			if not json.has_key("type"):
 				return "No type key"

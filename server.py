@@ -21,8 +21,6 @@ import sys
 class ThreadingSimpleServer(ThreadingMixIn, HTTPServer):
 	pass
 
-semaphore =  threading.Semaphore()
-
 class S(SimpleHTTPRequestHandler):
 	def _set_headers(self):
 		self.send_response(200)
@@ -53,7 +51,7 @@ class S(SimpleHTTPRequestHandler):
 			print traceback.print_exc()
 			resp = str(e)
 		
-		semaphore.acquire()
+		MarketState.semaphore.acquire()
 		if data is not None:
 			try:			
 				req = MarketRequest.MarketRequest()
@@ -62,7 +60,7 @@ class S(SimpleHTTPRequestHandler):
 				print traceback.print_exc()
 				resp = str(e)
 		
-		semaphore.release()
+		MarketState.semaphore.release()
 		#print "response = %s"%(resp)
 		try:
 			self.wfile.write(str(resp))
@@ -78,7 +76,7 @@ def run(server_class=HTTPServer, handler_class=S, port=80):
 	
 	while True:
 		time.sleep(10)
-		semaphore.acquire()
+		MarketState.semaphore.acquire()
 		
 		try:
 			MarketTrader.performTrades()
@@ -90,10 +88,10 @@ def run(server_class=HTTPServer, handler_class=S, port=80):
 			os.unlink("shutdown")
 			print 'Shutting down...'
 			threading.Thread(target=httpd.shutdown).start()
-			semaphore.release()
+			MarketState.semaphore.release()
 			time.sleep(5)
 			break
-		semaphore.release()
+		MarketState.semaphore.release()
 
 if __name__ == "__main__":
 	from sys import argv
