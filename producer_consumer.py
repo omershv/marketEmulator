@@ -48,9 +48,9 @@ def tradeSomething(amount):
 				price = max(1, int((ask + bid) / 2) - 1) # compromise
 	
 	if args.producer_or_consumer == "consumer":
-		rateTarget = 1 + (float(args.price_target - price) / args.price_target)
+		rateTarget = max(0, 1 + (float(args.price_target - price) / args.price_target))
 	else:
-		rateTarget = 1 + (float(price - args.price_target) / args.price_target)
+		rateTarget = min(10, 1 + (float(price - args.price_target) / args.price_target))
 	rate = rate * 0.8 + rateTarget * 0.2
 	if args.producer_or_consumer == "consumer":
 		print clientFramework.makeBuyRequest(commodity, amount, price)
