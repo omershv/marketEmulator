@@ -1,4 +1,5 @@
 import MarketState
+import time
 
 def performTrades():
 	for commodity in MarketState.commodities:
@@ -21,3 +22,5 @@ def performTrades():
 					if sell.amount == 0:
 						idx = [i for i in range(len(MarketState.activeQueries)) if MarketState.activeQueries[i].id == sell.id][0]
 						del MarketState.activeQueries[idx]
+					MarketState.marketHistory[commodity].append((time.time(), price, amount))
+					MarketState.marketHistory[commodity] = MarketState.marketHistory[commodity][-2000:]

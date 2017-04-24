@@ -31,8 +31,10 @@ class S(SimpleHTTPRequestHandler):
 		self._set_headers()
 		holdings = sorted(MarketState.userHoldings.items(), key = lambda (k,v):int(k.split("user")[1]))
 		leading = map(lambda (a,b):a + " - " + str(b["funds"]), list(reversed(sorted(holdings[:80], key=lambda (k,v): v["funds"])))[:5])
+		history = map(lambda k:str((k, MarketState.marketHistory[k][-10:])), MarketState.commodities.keys())
 		self.wfile.write("<html><body>");
 		self.wfile.write("<h1> Leaders </h1> <h3>%s</h3>"%str("<br>".join(leading)))
+		self.wfile.write("<h1> History </h1> <h3>%s</h3>"%str("<br>".join(history)))
 		self.wfile.write("<h1> Holdings </h1> %s"%str("<br>".join(map(lambda (k,v):k + " - " + str(v),holdings))))
 		self.wfile.write("</body></html>");
 
