@@ -46,6 +46,17 @@ def __processQueryMarket(req):
 		ask = sellRequests[0].price
 	return json.dumps({"bid":bid, "ask":ask})
 
+def __processQueryAllMarket(req):
+	res = [{"id":x, "info":{"bid":0, "ask":9999999}} for x in MarketState.commodities.keys()]
+	for q in MarketState.activeQueries:
+		if q.type == "buy":
+			if res[q.commodity]["info"]["bid"] < q.price:
+				res[q.commodity]["info"]["bid"] = q.price
+		if q.type == "sell":
+			if res[q.commodity]["info"]["ask"] > q.price:
+				res[q.commodity]["info"]["ask"] = q.price
+	return json.dumps(res)
+
 def __processCancelBuySell(req):
 	matches = [x for x in MarketState.activeQueries if x.id == req.id]
 	if len(matches) == 0:
@@ -64,7 +75,7 @@ def __processCancelBuySell(req):
 
 def processReq(req):
 	requestTypes = {"buy": __processBuySell, "sell": __processBuySell, "queryBuySell":__processQueryBuySell, 
-	"queryUser":__processQueryUser, "queryMarket":__processQueryMarket,
+	"queryUser":__processQueryUser, "queryMarket":__processQueryMarket, "queryAllMarket":__processQueryAllMarket,
 	"cancelBuySell":__processCancelBuySell, "queryUserRequests":__processQueryUserRequests}
 	
 	return requestTypes[req.type](req)

@@ -37,6 +37,8 @@ def parse_args():
 	parser_query_market = subparsers.add_parser('query_market', help='query market request')
 	parser_query_market.add_argument('commodity', type=int)
 
+	parser_query_all_market = subparsers.add_parser('query_all_market', help='query all market request')
+	
 	parser_cancel_buy_sell = subparsers.add_parser('cancel_buy_sell', help='cancel buy/sell request')
 	parser_cancel_buy_sell.add_argument('id', type=int)
 
@@ -59,5 +61,6 @@ clientFramework.init(user, "http://ise172.ise.bgu.ac.il")
 
 print {'buy': clientFramework.makeBuyRequest, 'sell': clientFramework.makeSellRequest, 'query_user': clientFramework.makeQueryUserRequest, 
 'query_user_requests': clientFramework.makeQueryUserRequestsRequest, 'query_user_extended': clientFramework.makeExtendedQueryUserRequest, 
-'query_buy_sell': clientFramework.makeQueryBuySellRequest, 'query_market': clientFramework.makeQueryMarketRequest, 'cancel_buy_sell': clientFramework.makeCancelBuySellRequest, 
+'query_buy_sell': clientFramework.makeQueryBuySellRequest, 'query_market': clientFramework.makeQueryMarketRequest, 
+'query_all_market': clientFramework.makeQueryAllMarketRequest, 'cancel_buy_sell': clientFramework.makeCancelBuySellRequest, 
 'cancel_all_buy_sell': clientFramework.cancelAllBuySells}[sys.argv[1]](**vars(args))

@@ -57,6 +57,13 @@ def makeQueryMarketRequest(commodity):
 	}
 	return makeReq(req)
 
+def makeQueryAllMarketRequest():
+	req = {
+        "auth": {"user": user, "token": token},
+		"type": "queryAllMarket",
+	}
+	return makeReq(req)
+
 def makeQueryBuySellRequest(id): 
 	req = {
         "auth": {"user": user, "token": token},

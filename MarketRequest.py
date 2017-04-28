@@ -55,7 +55,7 @@ class MarketRequest:
 			print traceback.print_exc()
 			return str(e)
 	
-	def loadQueryUser(self, json):
+	def loadQueryNoArgs(self, json):
 		try:
 			return RequestOperations.processReq(self)
 		except Exception as e: 
@@ -88,8 +88,8 @@ class MarketRequest:
 			return str(e)
 	
 	requestTypes = {"buy": loadBuySell, "sell": loadBuySell, "queryBuySell":loadQueryBuySell, 
-	"queryUser":loadQueryUser, "queryMarket":loadQueryMarket,
-	"cancelBuySell":loadCancelBuySell, "queryUserRequests":loadQueryUser}
+	"queryUser":loadQueryNoArgs, "queryMarket":loadQueryMarket, "queryAllMarket":loadQueryNoArgs,
+	"cancelBuySell":loadCancelBuySell, "queryUserRequests":loadQueryNoArgs}
 	
 	def loadFromJson(self, json):
 		try:
