@@ -1,14 +1,18 @@
 import MarketState
 from Crypto.PublicKey import RSA
 from Crypto.Signature import PKCS1_v1_5
+from Crypto.Cipher import PKCS1_v1_5 as pkcs
 from Crypto.Hash import SHA256
+from Crypto.Cipher import AES
 import traceback
 import json
 import RequestOperations
 import pickle
 import time
+import os
 
 userTimings = dict(map(lambda i:(("user%d"%i), list(range(0,2000,100))),range(100)))
+userNonces = dict(map(lambda i:(("user%d"%i), []),range(100)))
 
 class MarketRequest:
 	def toDict(self):
@@ -98,7 +102,11 @@ class MarketRequest:
 			
 			if not json["auth"].has_key("user") or not json["auth"].has_key("token"):
 				return "No user or auth token"
-				
+			
+			nonce = None
+			if json["auth"].has_key("nonce"):
+				nonce = json["auth"]["nonce"]
+			
 			user = json["auth"]["user"].encode("utf8")
 			token = json["auth"]["token"]
 			
@@ -110,7 +118,15 @@ class MarketRequest:
 			public_key_object = RSA.importKey(keys[user])
 			cipher = PKCS1_v1_5.new(public_key_object)
 			digest = SHA256.new()
-			digest.update(user)
+			if nonce is not None:
+				digest.update("%s_%s"%(user,nonce))
+				if nonce in userNonces[user]:
+					return "Non unique nonce"
+				userNonces[user].append(nonce)
+				userNonces[user] = userNonces[user][-100:]
+			else:
+				digest.update(user)
+			
 			verified = cipher.verify(digest, token.decode('base64'))
 			
 			if not verified:
@@ -136,7 +152,13 @@ class MarketRequest:
 			if not self.requestTypes.has_key(self.type):
 				return "Bad request type"
 			
-			return self.requestTypes[self.type](self, json)
+			resp = self.requestTypes[self.type](self, json)
+			if nonce is not None:
+				cipher = pkcs.new(public_key_object)
+				resp = "".join(map(lambda i:cipher.encrypt(resp[i:i + 64]), range(0,len(resp),64)))
+				return resp.encode('base64')
+			else:
+				return resp
 			
 		except Exception as e: 
 			print traceback.print_exc()
