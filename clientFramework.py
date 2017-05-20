@@ -96,6 +96,19 @@ def cancelOldBuySells():
 			ret += "\n" + makeCancelBuySellRequest(req)
 	return ret
 
+def countResources():
+	resp = json.loads(makeQueryUserRequest())
+	funds = resp["funds"]
+	commodities = resp["commodities"]
+	resp = json.loads(makeQueryUserRequestsRequest())
+	for req in resp:
+		r = req["request"]
+		if r["type"] == "buy":
+			funds+=r["amount"] * r["price"]
+		else:
+			commodities[str(r["commodity"])]+=r["amount"]
+	return (funds, commodities)
+
 def makeReq(data):
 	print
 	print json.dumps(data)
